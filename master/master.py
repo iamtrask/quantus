@@ -11,12 +11,13 @@ slaveSockets = list()
 def addSlave(port):
 	tempSocket = context.socket(zmq.REQ)
 	tempSocket.RCVTIMEO = 2000
-	slaveSockets.append(tempSocket)
-	slaveSockets[len(slaveSockets) - 1].connect("tcp://localhost:"+str(port))
-	slaveSockets[len(slaveSockets) - 1].send(b"Hello slave!")
+	
+	tempSocket.connect("tcp://localhost:"+str(port))
+	tempSocket.send(b"Hello slave!")
 	try:
 		print(slaveSockets[len(slaveSockets) - 1].recv())
 		controllerSocket.send(b"Added Slave on Port:" + str(port))
+		slaveSockets.append(tempSocket)
 	except:
 		print("No slave listening on port:" + str(port))
 		controllerSocket.send(b"No slave on port:" + str(port))
