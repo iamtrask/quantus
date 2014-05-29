@@ -9,10 +9,19 @@ controllerSocket.bind("tcp://*:5555")
 slaveSockets = list()
 
 def addSlave(port):
-	slaveSockets.append(context.socket(zmq.REQ))
+	tempSocket = context.socket(zmq.REQ)
+	tempSocket.RCVTIMEO = 2000
+	slaveSockets.append(tempSocket)
 	slaveSockets[len(slaveSockets) - 1].connect("tcp://localhost:"+str(port))
 	slaveSockets[len(slaveSockets) - 1].send(b"Hello slave!")
-	controllerSocket.send(b"Added Slave on Port:" + str(port))
+	try:
+		print(slaveSockets[len(slaveSockets) - 1].recv())
+		controllerSocket.send(b"Added Slave on Port:" + str(port))
+	except:
+		print("No slave listening on port:" + str(port))
+		controllerSocket.send(b"No slave on port:" + str(port))
+
+	
 
 def countSlaves():
 	controllerSocket.send(b""+(str(len(slaveSockets))))
