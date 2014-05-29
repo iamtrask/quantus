@@ -9,23 +9,32 @@ controllerSocket.bind("tcp://*:5555")
 slaveSockets = list()
 
 def addSlave(port):
+
 	tempSocket = context.socket(zmq.REQ)
 	tempSocket.RCVTIMEO = 2000
-	
 	tempSocket.connect("tcp://localhost:"+str(port))
 	tempSocket.send(b"Hello slave!")
+
 	try:
-		print(slaveSockets[len(slaveSockets) - 1].recv())
+		print(tempSocket.recv())
 		controllerSocket.send(b"Added Slave on Port:" + str(port))
 		slaveSockets.append(tempSocket)
 	except:
 		print("No slave listening on port:" + str(port))
 		controllerSocket.send(b"No slave on port:" + str(port))
 
-	
 
 def countSlaves():
+
 	controllerSocket.send(b""+(str(len(slaveSockets))))
+
+
+def scanForSlaves():
+
+	for i in range(100):
+		addSlaveSilent(5556 + i)
+
+	controllerSocket.send(b"Total Slaves:"+(str(len(slaveSockets))))
 
 def parse(message):
 	
@@ -35,6 +44,8 @@ def parse(message):
 		addSlave(message[9:])
 	elif (message == "countSlaves"):
 		countSlaves()
+	elif (message == "scanForSlaves"):
+		scanForSlaves()
 	else:
 		controllerSocket.send(b"ERROR: Could not parse your command... please try again.")
 
