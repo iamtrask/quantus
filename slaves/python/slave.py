@@ -25,7 +25,7 @@ class Slave:
 
 
 	def __init__(self):
-		
+		print("Starting Slave")
 		self.context = zmq.Context()
 		self.socket = self.context.socket(zmq.REP)
 		self.socket.bind("tcp://*:5557")
@@ -39,6 +39,6 @@ class Slave:
 		    #  Send reply back to client
 		    # socket.send(b"I am a slave node.")
 
-print("Starting Slave")
+
 slave = Slave()
 	
