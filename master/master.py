@@ -17,12 +17,13 @@ def addSlave(port):
 
 	try:
 		print(tempSocket.recv())
-		controllerSocket.send(b"Added Slave on Port:" + str(port))
 		slaveSockets.append(tempSocket)
-	except:
-		print("No slave listening on port:" + str(port))
-		controllerSocket.send(b"No slave on port:" + str(port))
+		return b"Added Slave on Port:" + str(port)
 
+	except:
+		tempSocket.close()
+		print("No slave listening on port:" + str(port))
+		return "No slave on port:" + str(port)
 
 def countSlaves():
 
@@ -31,8 +32,8 @@ def countSlaves():
 
 def scanForSlaves():
 
-	for i in range(100):
-		addSlaveSilent(5556 + i)
+	for i in range(20):
+		addSlave(5556+i)
 
 	controllerSocket.send(b"Total Slaves:"+(str(len(slaveSockets))))
 
@@ -41,7 +42,7 @@ def parse(message):
 	print("Received request: %s" % message)
 
 	if (message[:9] == "addSlave:"):
-		addSlave(message[9:])
+		controllerSocket.send((addSlave(message[9:])))
 	elif (message == "countSlaves"):
 		countSlaves()
 	elif (message == "scanForSlaves"):
