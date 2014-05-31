@@ -1,28 +1,44 @@
-print("Starting Slave")
 
 import time
 import zmq
 
-def parse(message):
-	print("Received request: %s" % message)
+class Slave:
 
-	if (message[:9] == "message"):
-		socket.send(b"response from slave node")
-	elif (message == "otherMessage"):
-		socket.send(b"another response from slave node")
-	else:
-		socket.send(b"ERROR: Could not parse your command to slave node... please try again.")
+	masterAddress = "none"
+	
 
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5557")
+	def parse(self,message):
+		print("Received request: %s" % message)
 
-while True:
-    #  Wait for next request from client
-    message = socket.recv()
-    print("Received request: %s" % message)
+		if (message[:18] == "letMeBeYourMaster:"):
+			if(self.masterAddress == "none"):
+				self.masterAddress = message[19:]
+				self.socket.send(b"yesMaster")
+			else:
+				self.socket.send(b"youWillNeverBeMyMaster")
 
-    parse(message)
+		elif (message == "otherMessage"):
+			self.socket.send(b"another response from slave node")
 
-    #  Send reply back to client
-    # socket.send(b"I am a slave node.")
+		else:
+			self.socket.send(b"ERROR: Could not parse your command to slave node... please try again.")
+
+
+	def __init__(self):
+		
+		self.context = zmq.Context()
+		self.socket = self.context.socket(zmq.REP)
+		self.socket.bind("tcp://*:5557")
+
+		while True:
+		    #  Wait for next request from client
+		    message = self.socket.recv()
+
+		    self.parse(message)
+
+		    #  Send reply back to client
+		    # socket.send(b"I am a slave node.")
+
+print("Starting Slave")
+slave = Slave()
+	

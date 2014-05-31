@@ -1,29 +1,36 @@
 import time
 import zmq
 
-context = zmq.Context()
 
+
+context = zmq.Context()
+LISTEN_PORT = 5555
 controllerSocket = context.socket(zmq.REP)
-controllerSocket.bind("tcp://*:5555")
+controllerSocket.bind("tcp://*:"+str(LISTEN_PORT))
 
 slaveSockets = list()
 
-def addSlave(port):
+def addSlave(slavePort):
 
 	tempSocket = context.socket(zmq.REQ)
 	tempSocket.RCVTIMEO = 2000
-	tempSocket.connect("tcp://localhost:"+str(port))
-	tempSocket.send(b"Hello slave!")
+	tempSocket.connect("tcp://localhost:"+str(slavePort))
+	tempSocket.send(b"letMeBeYourMaster:"+str(LISTEN_PORT))
 
 	try:
-		print(tempSocket.recv())
-		slaveSockets.append(tempSocket)
-		return b"Added Slave on Port:" + str(port)
+		response = tempSocket.recv()
+		print("Slave:" + str(response))
+		if(response == "yesMaster"):
+			slaveSockets.append(tempSocket)
+			return b"Added Slave on Port:" + str(slavePort)
+		else:
+			return b"Failed to add Slave on Port:" + str(slavePort)
+			tempSocket.close()
 
 	except:
 		tempSocket.close()
-		print("No slave listening on port:" + str(port))
-		return "No slave on port:" + str(port)
+		print("No slave listening on port:" + str(slavePort))
+		return "No slave on port:" + str(slavePort)
 
 def countSlaves():
 
