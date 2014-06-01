@@ -46,7 +46,7 @@ setup(name="quantus",
       cmdclass={'test': PyTest},
       
       # TODO: List of packages that this one depends upon:   
-      install_requires=['numpy', 'theano', 'zmq'],
+      install_requires=['numpy', 'theano', 'pyzmq'],
       # TODO: List executable scripts, provided by the package (this is just an example)
       entry_points={
         'console_scripts': 
