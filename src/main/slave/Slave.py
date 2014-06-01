@@ -35,7 +35,7 @@ class Slave:
 
             self.parse(message)
 
-            #  Send reply back to client
+            # Send reply back to client
             # socket.send(b"I am a slave node.")
 
 

@@ -65,7 +65,7 @@ class Master:
             self.parse(message)
 
 
-            #  Send reply back to client
+            # Send reply back to client
 
 
 master = Master()
