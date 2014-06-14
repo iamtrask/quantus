@@ -11,4 +11,4 @@ Getting Started:
 
 3) Run: ipython notebook 
 
-4) Open "Example" from ipython terminal... and there you will see some example commands
+4) Open "Example" from ipython browser... and there you will see some example commands
