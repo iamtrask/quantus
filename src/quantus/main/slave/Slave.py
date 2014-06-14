@@ -26,6 +26,10 @@ class Slave:
     def mul(self,index,value):
         return (b""+str(self.subvectors[index].mul(value)))
 
+    def mulVec(self,index,index2):
+        self.subvectors[int(index)].data *= self.subvectors[int(index2)].data
+        return (b"vectors multiplied elementwise")
+
     def pow(self,index,value):
         return (b""+str(self.subvectors[index].pow(value)))
 
@@ -57,6 +61,10 @@ class Slave:
         if message[:4] == "mul:":
             split = int(message[4:].find(":")) + 4
             return self.mul(int(message[4:split]),(message[split+1:]))
+
+        if message[:7] == "mulVec:":
+            split = int(message[7:].find(":")) + 7
+            return self.mulVec(int(message[7:split]),(message[split+1:]))
 
         if message[:4] == "pow:":
             split = int(message[4:].find(":")) + 4

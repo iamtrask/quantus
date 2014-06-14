@@ -28,7 +28,13 @@ class SubVectorMaster():
 
 
     def mul(self, value):
-        return self.cmd("mul:" + str(self.indexInSlave) + ":" + str(value))
+
+        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+            return self.cmd("mul:" + str(self.indexInSlave) + ":" + str(value))
+        elif(str(type(value)) == "<type 'instance'>"):
+            return self.cmd("mulVec:" + str(self.indexInSlave) + ":" + str(value.indexInSlave))
+        else:
+            return "not sure"
 
     def pow(self, value):
         return self.cmd("pow:" + str(self.indexInSlave) + ":" + str(value))

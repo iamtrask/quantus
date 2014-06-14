@@ -58,18 +58,33 @@ class Vector():
 
         else:
             print(type(value))
-            return "ERROR: Only scalar addition supported"
+            return "ERROR: What kind of object is this?"
 
 
     def mul(self, value):
         if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+
             response = ""
+
             for sv in self.subVectors:
                 response += str(sv.mul(value))
+
             return response
+
+        elif(str(type(value)) == "<type 'instance'>"):
+
+            response = ""
+            if(value.length == self.length):
+                print ("executing vector multiplication")
+                for i, sv in enumerate(self.subVectors):
+                    sv.mul(value.subVectors[i])
+            else:
+                return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
+
+
         else:
             print(type(value))
-            return "ERROR: Only scalar multiplication supported"
+            return "ERROR: What kind of object is this?"
 
     def pow(self, value):
         if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
