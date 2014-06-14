@@ -33,7 +33,7 @@ class Master:
     def addSlave(self, slavePort):
 
         tempSocket = self.context.socket(zmq.REQ)
-        tempSocket.RCVTIMEO = 2000
+        tempSocket.RCVTIMEO = 60000
         tempSocket.connect("tcp://localhost:" + str(slavePort))
         tempSocket.send(b"letMeBeYourMaster:" + str(self.LISTEN_PORT))
 
