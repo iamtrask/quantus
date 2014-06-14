@@ -80,3 +80,14 @@ class Vector():
         else:
             print(type(value))
             return "ERROR: Only scalar random limit supported"
+
+
+    def uniform(self, value):
+        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+            response = ""
+            for sv in self.subVectors:
+                response += str(sv.uniform(value))
+            return response
+        else:
+            print(type(value))
+            return "ERROR: Only scalar random limit supported"

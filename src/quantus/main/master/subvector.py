@@ -30,6 +30,8 @@ class SubVectorMaster():
     def randn(self, value):
         return self.cmd("randn:" + str(self.indexInSlave) + ":" + str(value))
 
+    def uniform(self, value):
+        return self.cmd("uniform:" + str(self.indexInSlave) + ":" + str(value))
 
     def getData(self):
         raw = self.cmd("getdata:"+str(self.indexInSlave))

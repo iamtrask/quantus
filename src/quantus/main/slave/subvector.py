@@ -30,5 +30,10 @@ class SubVectorSlave():
         self.mul(value)
         return 0
 
+    def uniform(self,value):
+        self.data = np.random.rand(self.length)
+        self.mul(value)
+        return 0
+
     def getData(self):
         return json.dumps(self.data.tolist())

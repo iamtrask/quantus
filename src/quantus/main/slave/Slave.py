@@ -26,8 +26,10 @@ class Slave:
         return (b""+str(self.subvectors[index].pow(value)))
 
     def randn(self,index,value):
-        return (b""+str(self.subvectors[index].ran(value)))
+        return (b""+str(self.subvectors[index].randn(value)))
 
+    def uniform(self, index, value):
+        return (b""+str(self.subvectors[index].uniform(value)))
 
     def getData(self,index):
         return self.subvectors[int(index)].getData()
@@ -49,9 +51,13 @@ class Slave:
             split = int(message[4:].find(":")) + 4
             return self.pow(int(message[4:split]),(message[split+1:]))
 
-        if message[:4] == "randn:":
-            split = int(message[4:].find(":")) + 4
-            return self.randn(int(message[4:split]),(message[split+1:]))
+        if message[:6] == "randn:":
+            split = int(message[6:].find(":")) + 6
+            return self.randn(int(message[6:split]),(message[split+1:]))
+
+        if message[:8] == "uniform:":
+            split = int(message[8:].find(":")) + 8
+            return self.uniform(int(message[8:split]),(message[split+1:]))
         
         if message[:8] == "getdata:":
             return self.getData(message[8:])
