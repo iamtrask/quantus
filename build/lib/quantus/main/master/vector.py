@@ -2,7 +2,7 @@ __author__ = 'andrewtrask'
 
 import numpy as np
 
-from quantus.main.master.subvector import SubVectorMaster
+from quantus.master.subvector_interface import SubVectorMaster
 
 class Vector():
 

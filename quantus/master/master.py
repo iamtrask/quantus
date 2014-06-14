@@ -2,9 +2,10 @@ __author__ = 'andrewtrask'
 
 import zmq
 
-from quantus.main.master.vector import Vector
-from quantus.main.master.matrix import Matrix
-
+from .vector import Vector
+from .matrix import Matrix
+import time
+import numpy as np
 class Master:
 
     LISTEN_PORT = 5555
@@ -12,19 +13,42 @@ class Master:
     vectors = list()
     matrices = list()
 
-    def vector(self,length):
-
-        vector = Vector(self.slaveSockets,length)
+    def vector(self,length, name="none"):
+        if(name == "none"):
+            name = "m:" + str((time.time())) + ":" + str(np.random.randint(100))
+        vector = Vector(name,self.slaveSockets,length)
         self.vectors.append(vector)
 
         return vector
 
-    def matrix(self, rows, cols):
-
-        matrix = Matrix(self.slaveSockets, rows, cols)
+    def matrix(self, rows, cols, name="none"):
+        if(name == "none"):
+            name = "m:" + str((time.time())) + ":" + str(np.random.randint(100))
+        matrix = Matrix(name, self.slaveSockets, rows, cols)
         self.matrices.append(matrix)
 
         return matrix
+
+    def listMatrices(self):
+        print("Matrices--------")
+        for matrix in self.matrices:
+            print (matrix.name)
+        print("\n\nVectors---------")
+        for vector in self.vectors:
+            print (vector.name)
+
+    def getMatrixByName(self,name):
+        for matrix in self.matrices:
+            if(matrix.name == name):
+                return matrix
+        print("no matrix with name:" + name)
+
+    def getVectorByName(self,name):
+        for vector in self.vectors:
+            if(vector.name == name):
+                return vector
+        print("no vector with name:" + name)
+
 
     def addSlave(self, slavePort):
 

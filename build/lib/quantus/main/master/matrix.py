@@ -2,7 +2,7 @@ __author__ = 'andrewtrask'
 
 import numpy as np
 
-from quantus.main.master.vector import Vector
+from quantus.master.vector import Vector
 
 
 class Matrix():

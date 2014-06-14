@@ -1,10 +1,9 @@
-from distutils.core import setup
+from distutils.core import setup, Extension
 setup(name='quantus',
       version='0.1',
-      py_modules=['quantus.main.master.Master',
-                  'quantus.main.master.matrix',
-                  'quantus.main.master.subvector',
-                  'quantus.main.master.vector',
-                  'quantus.main.slave.Slave',
-                  'quantus.main.slave.subvector'],
+      packages=['quantus',
+                'quantus.main',
+                'quantus.main.master',
+                  'quantus.main.slave'],
+
       )

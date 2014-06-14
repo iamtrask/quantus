@@ -2,12 +2,12 @@ __author__ = 'andrewtrask'
 
 import numpy as np
 
-from quantus.main.master.subvector import SubVectorMaster
+from quantus.master.subvector_interface import SubVectorMaster
 
 class Vector():
 
-    def __init__(self,slaveSockets,length, data=None):
-
+    def __init__(self,name,slaveSockets,length, data=None):
+        self.name = name
         self.slaveSockets = slaveSockets
         self.slaveCount = len(slaveSockets)
         self.length = length

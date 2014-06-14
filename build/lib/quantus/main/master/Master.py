@@ -2,7 +2,7 @@ __author__ = 'andrewtrask'
 
 import zmq
 
-from quantus.main.master.vector import Vector
+from quantus.master.vector import Vector
 from quantus.main.master.matrix import Matrix
 
 class Master:
@@ -12,14 +12,14 @@ class Master:
     vectors = list()
     matrices = list()
 
-    def createVector(self,length):
+    def vector(self,length):
 
         vector = Vector(self.slaveSockets,length)
         self.vectors.append(vector)
 
         return vector
 
-    def createMatrix(self, rows, cols):
+    def matrix(self, rows, cols):
 
         matrix = Matrix(self.slaveSockets, rows, cols)
         self.matrices.append(matrix)

@@ -1,5 +1,5 @@
-__author__ = 'andrewtrask'
+from quantus.slave.Slave import Slave
 
-from quantus.main.slave.Slave import Slave
+__author__ = 'andrewtrask'
 
 slave = Slave()

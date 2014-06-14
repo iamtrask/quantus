@@ -2,14 +2,15 @@ __author__ = 'andrewtrask'
 
 import numpy as np
 
-from quantus.main.master.vector import Vector
+from quantus.master.vector import Vector
 
 
 class Matrix():
 
 
-    def __init__(self,slaveSockets,numRows,numCols, data=None):
+    def __init__(self,name,slaveSockets,numRows,numCols, data=None):
 
+        self.name = name
         self.slaveSockets = slaveSockets
         self.slaveCount = len(slaveSockets)
         self.numRows = numRows
@@ -18,7 +19,7 @@ class Matrix():
         self.rows = list()
 
         for i in xrange(numRows):
-            self.rows.append(Vector(slaveSockets,numCols))
+            self.rows.append(Vector("matrix:" + str(name) + ":" + str(i),slaveSockets,numCols))
 
     def add(self, value):
 

@@ -4,7 +4,7 @@ import zmq
 
 # from src.quantus.main.slave.subvector import SubVectorSlave
 
-from quantus.main.slave.subvector import SubVectorSlave
+from quantus.slave.subvector import SubVectorSlave
 
 class Slave:
     masterAddress = "none"
