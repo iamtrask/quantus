@@ -3,10 +3,32 @@ __author__ = 'andrewtrask'
 import time
 import zmq
 
+from src.quantus.main.master.vector import Vector
 
 class Master:
+
     LISTEN_PORT = 5555
     slaveSockets = list()
+    vectors = list()
+
+    def createVector(self,length):
+
+        vector = Vector(self.slaveSockets,length)
+        self.vectors.append(vector)
+
+        return vector
+
+
+
+
+
+
+
+
+
+
+
+
 
     def addSlave(self, slavePort):
 
@@ -41,6 +63,15 @@ class Master:
 
         self.controllerSocket.send(b"Total Slaves:" + (str(len(self.slaveSockets))))
 
+    def parseMatrixCommand(self,message):
+
+        for slave in self.slaveSockets:
+            slave.send("m")
+            print(slave.recv())
+
+        self.controllerSocket.send("performed operation")
+
+
     def parse(self, message):
 
         print("Received request: %s" % message)
@@ -51,21 +82,25 @@ class Master:
             self.countSlaves()
         elif (message == "scanForSlaves"):
             self.scanForSlaves()
+        elif (message[:1] == "m"):
+            self.parseMatrixCommand(message)
         else:
             self.controllerSocket.send(b"ERROR: Could not parse your command... please try again.")
 
+
+    def listen(self):
+        while True:
+            # Wait for next request from client
+            message = self.controllerSocket.recv()
+            self.parse(message)
 
     def __init__(self):
         print("Starting Master")
         self.context = zmq.Context()
         self.controllerSocket = self.context.socket(zmq.REP)
         self.controllerSocket.bind("tcp://*:" + str(self.LISTEN_PORT))
-        while True:
-            # Wait for next request from client
-            message = self.controllerSocket.recv()
-            self.parse(message)
+
 
 
 # Send reply back to client
 
-master = Master()
