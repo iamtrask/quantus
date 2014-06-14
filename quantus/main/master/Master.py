@@ -1,9 +1,9 @@
 __author__ = 'andrewtrask'
 
-import time
 import zmq
 
-from src.quantus.main.master.vector import Vector
+from quantus.main.master.vector import Vector
+from quantus.main.master.matrix import Matrix
 
 class Master:
 
@@ -21,8 +21,10 @@ class Master:
 
     def createMatrix(self, rows, cols):
 
-        matrix = Matrix(self,self.slaveSockets, rows, cols)
+        matrix = Matrix(self.slaveSockets, rows, cols)
         self.matrices.append(matrix)
+
+        return matrix
 
     def addSlave(self, slavePort):
 

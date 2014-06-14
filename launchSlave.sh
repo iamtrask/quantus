@@ -1,1 +1,2 @@
-ipython ./src/quantus/scripts/launchSlave.py
+#!/bin/sh
+ipython ./quantus/scripts/launchSlave.py

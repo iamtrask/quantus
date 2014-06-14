@@ -1,11 +1,10 @@
 __author__ = 'andrewtrask'
 
-import time
 import zmq
 
 # from src.quantus.main.slave.subvector import SubVectorSlave
 
-from subvector import SubVectorSlave
+from quantus.main.slave.subvector import SubVectorSlave
 
 class Slave:
     masterAddress = "none"

@@ -1,8 +1,8 @@
 __author__ = 'andrewtrask'
 
-from src.quantus.main.master.subvector import SubVectorMaster
-
 import numpy as np
+
+from quantus.main.master.subvector import SubVectorMaster
 
 class Vector():
 
