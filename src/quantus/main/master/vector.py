@@ -91,3 +91,13 @@ class Vector():
         else:
             print(type(value))
             return "ERROR: Only scalar random limit supported"
+
+
+    def sum(self):
+
+        total = 0
+
+        for sv in self.subVectors:
+            total += float(sv.sum())
+
+        return total

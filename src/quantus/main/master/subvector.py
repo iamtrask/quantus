@@ -37,3 +37,7 @@ class SubVectorMaster():
         raw = self.cmd("getdata:"+str(self.indexInSlave))
         return np.array(json.loads(raw))
 
+    def sum(self):
+        raw = self.cmd("sum:"+str(self.indexInSlave))
+        return float(raw)
+

@@ -34,6 +34,9 @@ class Slave:
     def getData(self,index):
         return self.subvectors[int(index)].getData()
 
+    def sum(self,index):
+        return self.subvectors[int(index)].sum()
+
     def parseSubVectorCommand(self, message):
 
         if message[:7] == "create:":
@@ -61,6 +64,9 @@ class Slave:
         
         if message[:8] == "getdata:":
             return self.getData(message[8:])
+
+        if message[:4] == "sum:":
+            return self.sum(message[4:])
 
         return (b"something about matrices " + message)
 

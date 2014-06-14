@@ -35,5 +35,8 @@ class SubVectorSlave():
         self.mul(value)
         return 0
 
+    def sum(self):
+        return str(sum(self.data))
+
     def getData(self):
         return json.dumps(self.data.tolist())
