@@ -10,6 +10,7 @@ class Master:
     LISTEN_PORT = 5555
     slaveSockets = list()
     vectors = list()
+    matrices = list()
 
     def createVector(self,length):
 
@@ -17,6 +18,11 @@ class Master:
         self.vectors.append(vector)
 
         return vector
+
+    def createMatrix(self, rows, cols):
+
+        matrix = Matrix(self,self.slaveSockets, rows, cols)
+        self.matrices.append(matrix)
 
     def addSlave(self, slavePort):
 
