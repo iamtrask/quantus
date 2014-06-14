@@ -128,7 +128,3 @@ class Slave:
 
             #  Send reply back to client
             # socket.send(b"I am a slave node.")
-
-
-slave = Slave()
-    
