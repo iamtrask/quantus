@@ -19,7 +19,13 @@ class SubVectorMaster():
         return self.socket.recv()
 
     def add(self, value):
-        return self.cmd("add:" + str(self.indexInSlave) + ":" + str(value))
+        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+            return self.cmd("add:" + str(self.indexInSlave) + ":" + str(value))
+        elif(str(type(value)) == "<type 'instance'>"):
+            return self.cmd("addVec:" + str(self.indexInSlave) + ":" + str(value.indexInSlave))
+        else:
+            return "not sure"
+
 
     def mul(self, value):
         return self.cmd("mul:" + str(self.indexInSlave) + ":" + str(value))

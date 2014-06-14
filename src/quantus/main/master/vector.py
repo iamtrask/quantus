@@ -6,7 +6,7 @@ import numpy as np
 
 class Vector():
 
-    def __init__(self,slaveSockets,length):
+    def __init__(self,slaveSockets,length, data=None):
 
         self.slaveSockets = slaveSockets
         self.slaveCount = len(slaveSockets)
@@ -45,6 +45,16 @@ class Vector():
                 response += str(sv.add(value))
 
             return response
+
+        elif(str(type(value)) == "<type 'instance'>"):
+
+            response = ""
+            if(value.length == self.length):
+                print ("executing vector addition")
+                for i, sv in enumerate(self.subVectors):
+                    sv.add(value.subVectors[i])
+            else:
+                return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
 
         else:
             print(type(value))

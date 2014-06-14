@@ -19,6 +19,10 @@ class Slave:
     def add(self,index,value):
         return (b""+str(self.subvectors[index].add(value)))
 
+    def addVec(self,index,index2):
+        self.subvectors[int(index)].data += self.subvectors[int(index2)].data
+        return (b"vectors added")
+
     def mul(self,index,value):
         return (b""+str(self.subvectors[index].mul(value)))
 
@@ -45,6 +49,10 @@ class Slave:
         if message[:4] == "add:":
             split = int(message[4:].find(":")) + 4
             return self.add(int(message[4:split]),(message[split+1:]))
+
+        if message[:7] == "addVec:":
+            split = int(message[7:].find(":")) + 7
+            return self.addVec(int(message[7:split]),(message[split+1:]))
 
         if message[:4] == "mul:":
             split = int(message[4:].find(":")) + 4

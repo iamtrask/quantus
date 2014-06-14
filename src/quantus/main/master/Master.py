@@ -18,18 +18,6 @@ class Master:
 
         return vector
 
-
-
-
-
-
-
-
-
-
-
-
-
     def addSlave(self, slavePort):
 
         tempSocket = self.context.socket(zmq.REQ)
