@@ -47,6 +47,12 @@ class Matrix():
     def __getitem__(self,index):
         return self.getRow(index)
 
+    def setRow(self,index,row):
+        self.rows[index] = row
+
+    def __setitem__(self, key, value):
+        self.setRow(key,value)
+
     def getData(self):
 
         data = np.zeros(0)
