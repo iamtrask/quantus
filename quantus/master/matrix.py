@@ -41,6 +41,11 @@ class Matrix():
             print(type(value))
             return "ERROR: What kind of object is this?"
 
+    def getRow(self,index):
+        return self.rows[index]
+
+    def __getitem__(self,index):
+        return self.getRow(index)
 
     def getData(self):
 
