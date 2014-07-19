@@ -7,3 +7,4 @@ eggs
 develop-eggs
 parts
 bin
+.DS_Store
