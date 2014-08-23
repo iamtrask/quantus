@@ -12,12 +12,13 @@ class SubVectorSlave():
 
     def setData(self, data):
         self.data = data
+        self.length = len(data)
 
-    def add(self,value):
+    def iadd(self,value):
         self.data += float(value)
         return 0
 
-    def mul(self,value):
+    def imul(self,value):
         self.data *= float(value)
         return 0
 
@@ -37,6 +38,11 @@ class SubVectorSlave():
 
     def sum(self):
         return str(sum(self.data))
+
+    def dot(self,subVector):
+        output = np.dot(self.data,subVector.data)
+        # print "Subvector:" + str(output)
+        return output
 
     def getData(self):
         return json.dumps(self.data.tolist())
