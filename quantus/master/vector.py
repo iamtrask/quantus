@@ -7,6 +7,7 @@ from quantus.master.subvector_interface import SubVectorMaster
 class Vector():
 
     def __init__(self,name,slaveSockets,length, data=None):
+
         self.name = name
         self.slaveSockets = slaveSockets
         self.slaveCount = len(slaveSockets)
@@ -25,7 +26,6 @@ class Vector():
 
             self.subVectors.append(SubVectorMaster(self.slaveSockets[slaveI],startIndex,endIndex))
 
-
         print ("Vector Created of Length:" + str(length))
 
     def getData(self):
@@ -42,10 +42,10 @@ class Vector():
         return self
 
     def iadd(self, value):
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
             response = ""
             for sv in self.subVectors:
-                response += str(sv.add(value))
+                response += str(sv.iadd(value))
 
             return response
 
@@ -55,12 +55,13 @@ class Vector():
             if(value.length == self.length):
                 print ("executing vector addition")
                 for i, sv in enumerate(self.subVectors):
-                    sv.add(value.subVectors[i])
+                    sv.iadd(value.subVectors[i])
             else:
                 return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
 
         else:
             print(type(value))
+            print ("ERROR: What kind of object is this?")
             return "ERROR: What kind of object is this?"
 
     def __imul__(self, other):
@@ -68,12 +69,12 @@ class Vector():
         return self
 
     def imul(self, value):
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
 
             response = ""
 
             for sv in self.subVectors:
-                response += str(sv.mul(value))
+                response += str(sv.imul(value))
 
             return response
 
@@ -83,7 +84,7 @@ class Vector():
             if(value.length == self.length):
                 print ("executing vector multiplication")
                 for i, sv in enumerate(self.subVectors):
-                    sv.mul(value.subVectors[i])
+                    sv.imul(value.subVectors[i])
             else:
                 return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
         else:
@@ -121,7 +122,7 @@ class Vector():
         return self
 
     def pow(self, value):
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
             response = ""
             for sv in self.subVectors:
                 response += str(sv.pow(value))
@@ -134,8 +135,12 @@ class Vector():
         self.imul(-1)
         return self
 
+    def __sub__(self, other):
+        self.iadd(-other)
+        return self
+
     def randn(self,value):
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
             response = ""
             for sv in self.subVectors:
                 response += str(sv.randn(value))
@@ -146,7 +151,7 @@ class Vector():
 
 
     def uniform(self, value):
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
             response = ""
             for sv in self.subVectors:
                 response += str(sv.uniform(value))
@@ -163,3 +168,21 @@ class Vector():
             total += float(sv.sum())
 
         return total
+
+    def dot(self, value):
+
+        if(str(type(value)) == "<type 'instance'>"):
+
+            if(value.length == self.length):
+                # print ("executing vector dot product")
+                prod = 0
+                for i, sv in enumerate(self.subVectors):
+                    prod += (sv.dot(value.subVectors[i]))
+                return prod
+            else:
+                return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
+
+        else:
+            print(type(value))
+            print ("ERROR: What kind of object is this?")
+            return "ERROR: What kind of object is this?"

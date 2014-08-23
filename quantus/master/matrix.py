@@ -44,7 +44,7 @@ class Matrix():
 
     def add(self, value):
 
-        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+        if(isinstance(value,int) or isinstance(value,float)):
             for row in self.rows:
                 row += (value)
 

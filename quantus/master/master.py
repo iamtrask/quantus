@@ -109,6 +109,10 @@ class Master:
 
 
     def listen(self):
+
+        self.controllerSocket = self.context.socket(zmq.REP)
+        self.controllerSocket.bind("tcp://*:" + str(self.LISTEN_PORT))
+
         while True:
             # Wait for next request from client
             message = self.controllerSocket.recv()
@@ -117,8 +121,7 @@ class Master:
     def __init__(self):
         print("Starting Master")
         self.context = zmq.Context()
-        self.controllerSocket = self.context.socket(zmq.REP)
-        self.controllerSocket.bind("tcp://*:" + str(self.LISTEN_PORT))
+
 
 
 
