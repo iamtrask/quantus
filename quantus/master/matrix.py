@@ -21,6 +21,27 @@ class Matrix():
         for i in xrange(numRows):
             self.rows.append(Vector("matrix:" + str(name) + ":" + str(i),slaveSockets,numCols))
 
+    def div(self, value):
+
+        if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
+            print ("executing scalar matrix division")
+            for row in self.rows:
+                row /= (value)
+
+        elif(str(type(value)) == "<type 'instance'>"):
+
+            response = ""
+            if(value.numRows == self.numRows & value.numCols == self.numCols):
+                print ("executing elementwise matrix division")
+                for i, sv in enumerate(self.rows):
+                    sv /= value.rows[i]
+            else:
+                return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
+
+        else:
+            print(type(value))
+            return "ERROR: What kind of object is this?"
+
     def add(self, value):
 
         if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):

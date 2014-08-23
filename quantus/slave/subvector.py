@@ -21,6 +21,10 @@ class SubVectorSlave():
         self.data *= float(value)
         return 0
 
+    def div(self, value):
+        self.data /= float(value)
+        return 0
+
     def pow(self,value):
         self.data = np.power(self.data,float(value))
         return 0

@@ -29,6 +29,13 @@ class Slave:
         self.subvectors[int(index)].data *= self.subvectors[int(index2)].data
         return (b"vectors multiplied elementwise")
 
+    def div(self, index, value):
+        return (b""+str(self.subvectors[index].div(value)))
+
+    def divVec(self, index, index2):
+        self.subvectors[int(index)].data /= self.subvectors[int(index2)].data
+        return (b"vectors divided elementwise")
+
     def pow(self,index,value):
         return (b""+str(self.subvectors[index].pow(value)))
 
@@ -64,6 +71,14 @@ class Slave:
         if message[:7] == "mulVec:":
             split = int(message[7:].find(":")) + 7
             return self.mulVec(int(message[7:split]),(message[split+1:]))
+
+        if message[:4] == "div:":
+            split = int(message[4:].find(":")) + 4
+            return self.div(int(message[4:split]), (message[split+1:]))
+
+        if message[:7] == "divVec:":
+            split = int(message[7:].find(":")) + 7
+            return self.divVec(int(message[7:split]), (message[split+1:]))
 
         if message[:4] == "pow:":
             split = int(message[4:].find(":")) + 4

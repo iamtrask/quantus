@@ -94,9 +94,27 @@ class Vector():
         self.idiv(other)
         return self
 
-    def idiv(self,other):
-        self.imul(1/other)
-        return (b"executed division")
+    def idiv(self, value):
+        if(isinstance(value, int) or isinstance(value, float)):
+
+            response = ""
+            for sv in self.subVectors:
+                response += str(sv.div(value))
+
+            return response
+
+        elif(str(type(value)) == "<type 'instance'>"):
+            response = ""
+            if(value.length == self.length):
+                print("executing vector division")
+                for i, sv in enumerate(self.subVectors):
+                    sv.div(value.subVectors[i])
+
+            else:
+                return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
+        else:
+            print(type(value))
+            return "ERROR: What kind of object is this?"
 
     def __pow__(self, power, modulo=None):
         self.pow(power)

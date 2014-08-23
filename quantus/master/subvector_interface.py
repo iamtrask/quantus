@@ -36,6 +36,14 @@ class SubVectorMaster():
         else:
             return "not sure"
 
+    def div(self, value):
+        if(isinstance(value, int) or isinstance(value, float)):
+            return self.cmd("div:" + str(self.indexInSlave) + ":" + str(value))
+        elif(str(type(value)) == "<type 'instance'>"):
+            return self.cmd("divVec:" + str(self.indexInSlave) + ":" + str(value.indexInSlave))
+        else:
+            return "not sure"
+
     def pow(self, value):
         return self.cmd("pow:" + str(self.indexInSlave) + ":" + str(value))
 
