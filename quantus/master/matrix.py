@@ -46,7 +46,7 @@ class Matrix():
 
         if(str(type(value)) == "<type 'int'>" or str(type(value)) == "<type 'float'>"):
             for row in self.rows:
-                row.add(value)
+                row += (value)
 
         elif(str(type(value)) == "<type 'instance'>"):
 
@@ -54,7 +54,7 @@ class Matrix():
             if(value.numRows == self.numRows & value.numCols == self.numCols):
                 print ("executing elementwise matrix addition")
                 for i, sv in enumerate(self.rows):
-                    sv.add(value.rows[i])
+                    sv += (value.rows[i])
             else:
                 return "ERROR: vectors not of same length " + str(self.length) + " vs " + str(value.length)
 
