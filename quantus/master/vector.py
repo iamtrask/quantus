@@ -38,7 +38,7 @@ class Vector():
         return data
 
     def __iadd__(self,other):
-        self.add(other)
+        self.iadd(other)
         return self
 
     def iadd(self, value):
