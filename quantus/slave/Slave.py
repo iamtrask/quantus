@@ -15,17 +15,17 @@ class Slave:
         self.subvectors.append(SubVectorSlave(int(message)))
         return (b""+str(index))
 
-    def add(self,index,value):
-        return (b""+str(self.subvectors[index].add(value)))
+    def iadd(self,index,value):
+        return (b""+str(self.subvectors[index].iadd(value)))
 
-    def addVec(self,index,index2):
+    def iaddVec(self,index,index2):
         self.subvectors[int(index)].data += self.subvectors[int(index2)].data
         return (b"vectors added")
 
-    def mul(self,index,value):
-        return (b""+str(self.subvectors[index].mul(value)))
+    def imul(self,index,value):
+        return (b""+str(self.subvectors[index].imul(value)))
 
-    def mulVec(self,index,index2):
+    def imulVec(self,index,index2):
         self.subvectors[int(index)].data *= self.subvectors[int(index2)].data
         return (b"vectors multiplied elementwise")
 
@@ -44,26 +44,37 @@ class Slave:
     def sum(self,index):
         return self.subvectors[int(index)].sum()
 
+    def dot(self,index,index2):
+        prod = self.subvectors[int(index)].dot(self.subvectors[int(index2)])
+        # print "Slave:" + str(prod)
+        return prod
+
     def parseSubVectorCommand(self, message):
 
         if message[:7] == "create:":
             return self.createSubVector(message[7:])
 
-        if message[:4] == "add:":
+        if message[:5] == "iadd:":
+            split = int(message[5:].find(":")) + 5
+            return self.iadd(int(message[5:split]),(message[split+1:]))
+
+        if message[:8] == "iaddVec:":
+            split = int(message[8:].find(":")) + 8
+            return self.iaddVec(int(message[8:split]),(message[split+1:]))
+
+        if message[:5] == "imul:":
+            split = int(message[5:].find(":")) + 5
+            return self.imul(int(message[4:split]),(message[split+1:]))
+
+        if message[:8] == "imulVec:":
+            split = int(message[8:].find(":")) + 8
+            return self.imulVec(int(message[8:split]),(message[split+1:]))
+
+        if message[:4] == "dot:":
             split = int(message[4:].find(":")) + 4
-            return self.add(int(message[4:split]),(message[split+1:]))
-
-        if message[:7] == "addVec:":
-            split = int(message[7:].find(":")) + 7
-            return self.addVec(int(message[7:split]),(message[split+1:]))
-
-        if message[:4] == "mul:":
-            split = int(message[4:].find(":")) + 4
-            return self.mul(int(message[4:split]),(message[split+1:]))
-
-        if message[:7] == "mulVec:":
-            split = int(message[7:].find(":")) + 7
-            return self.mulVec(int(message[7:split]),(message[split+1:]))
+            prod = self.dot(int(message[4:split]),(message[split+1:]))
+            # print "Slave2:" + str(prod)
+            return str(prod)
 
         if message[:4] == "pow:":
             split = int(message[4:].find(":")) + 4
@@ -83,11 +94,13 @@ class Slave:
         if message[:4] == "sum:":
             return self.sum(message[4:])
 
+
+
         return (b"something about matrices " + message)
 
 
     def parse(self, message):
-        print("Received request: %s" % message)
+        # print("Received request: %s" % message)
 
         if (message[:18] == "letMeBeYourMaster:"):
             if (self.masterAddress == "none"):
