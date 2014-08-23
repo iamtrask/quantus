@@ -1,8 +1,10 @@
 *.iml
 .idea/
+.ipynb_checkpoints/
 *.iws
 .installed*
 eggs
 develop-eggs
 parts
 bin
+.DS_Store
