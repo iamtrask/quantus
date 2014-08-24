@@ -2,117 +2,77 @@ __author__ = 'andrewtrask'
 
 import zmq
 
-# from src.quantus.main.slave.subvector import SubVectorSlave
-
 from quantus.slave.subvector import SubVectorSlave
+
 
 class Slave:
     masterAddress = "none"
 
-
     def createSubVector(self, message):
         index = len(self.subvectors)
         self.subvectors.append(SubVectorSlave(int(message)))
-        return (b""+str(index))
+        return (b"" + str(index))
 
-    def iadd(self,index,value):
-        return (b""+str(self.subvectors[index].iadd(value)))
+    def iadd(self, index, value):
+        return (b"" + str(self.subvectors[index].iadd(value)))
 
-    def iaddVec(self,index,index2):
+    def iaddVec(self, index, index2):
         self.subvectors[int(index)].data += self.subvectors[int(index2)].data
         return (b"vectors added")
 
-    def imul(self,index,value):
-        return (b""+str(self.subvectors[index].imul(value)))
+    def imul(self, index, value):
+        return (b"" + str(self.subvectors[index].imul(value)))
 
-    def imulVec(self,index,index2):
+    def imulVec(self, index, index2):
         self.subvectors[int(index)].data *= self.subvectors[int(index2)].data
         return (b"vectors multiplied elementwise")
 
     def div(self, index, value):
-        return (b""+str(self.subvectors[index].div(value)))
+        return (b"" + str(self.subvectors[index].div(value)))
 
     def divVec(self, index, index2):
         self.subvectors[int(index)].data /= self.subvectors[int(index2)].data
         return (b"vectors divided elementwise")
 
-    def pow(self,index,value):
-        return (b""+str(self.subvectors[index].pow(value)))
+    def pow(self, index, value):
+        return (b"" + str(self.subvectors[index].pow(value)))
 
-    def randn(self,index,value):
-        return (b""+str(self.subvectors[index].randn(value)))
+    def randn(self, index, value):
+        return (b"" + str(self.subvectors[index].randn(value)))
 
     def uniform(self, index, value):
-        return (b""+str(self.subvectors[index].uniform(value)))
+        return (b"" + str(self.subvectors[index].uniform(value)))
 
-    def getData(self,index):
+    def getData(self, index):
         return self.subvectors[int(index)].getData()
 
-    def sum(self,index):
+    def sum(self, index):
         return self.subvectors[int(index)].sum()
 
-    def dot(self,index,index2):
+    def dot(self, index, index2):
         prod = self.subvectors[int(index)].dot(self.subvectors[int(index2)])
         # print "Slave:" + str(prod)
         return prod
 
     def parseSubVectorCommand(self, message):
+        """
+        Map message of form "command:param1:param2:...:paramN" to internal method
 
-        if message[:7] == "create:":
-            return self.createSubVector(message[7:])
+        Parses all parameters into ints.
 
-        if message[:5] == "iadd:":
-            split = int(message[5:].find(":")) + 5
-            return self.iadd(int(message[5:split]),(message[split+1:]))
+        :param message: str of form "command:param1:param2:...:paramN"
+        """
+        components = message.split(":")
+        command = components[0]
+        params = map(lambda p: int(p), components[1:])
 
-        if message[:8] == "iaddVec:":
-            split = int(message[8:].find(":")) + 8
-            return self.iaddVec(int(message[8:split]),(message[split+1:]))
-
-        if message[:5] == "imul:":
-            split = int(message[5:].find(":")) + 5
-            return self.imul(int(message[4:split]),(message[split+1:]))
-
-        if message[:8] == "imulVec:":
-            split = int(message[8:].find(":")) + 8
-            return self.imulVec(int(message[8:split]),(message[split+1:]))
-
-        if message[:4] == "dot:":
-            split = int(message[4:].find(":")) + 4
-            prod = self.dot(int(message[4:split]),(message[split+1:]))
-            # print "Slave2:" + str(prod)
-            return str(prod)
-
-        if message[:4] == "div:":
-            split = int(message[4:].find(":")) + 4
-            return self.div(int(message[4:split]), (message[split+1:]))
-
-        if message[:7] == "divVec:":
-            split = int(message[7:].find(":")) + 7
-            return self.divVec(int(message[7:split]), (message[split+1:]))
-
-        if message[:4] == "pow:":
-            split = int(message[4:].find(":")) + 4
-            return self.pow(int(message[4:split]),(message[split+1:]))
-
-        if message[:6] == "randn:":
-            split = int(message[6:].find(":")) + 6
-            return self.randn(int(message[6:split]),(message[split+1:]))
-
-        if message[:8] == "uniform:":
-            split = int(message[8:].find(":")) + 8
-            return self.uniform(int(message[8:split]),(message[split+1:]))
-        
-        if message[:8] == "getdata:":
-            return self.getData(message[8:])
-
-        if message[:4] == "sum:":
-            return self.sum(message[4:])
-
-
-
-        return (b"something about matrices " + message)
-
+        if command in self.command_dict:
+            method = self.command_dict[command]
+            return str(method(*params))
+        else:
+            raise Exception(
+                "Invalid SubVector command argument passed to Slave:\n\tCommand:{0}\n\tFullMessage:{1}"
+                .format(command, message))
 
     def parse(self, message):
         # print("Received request: %s" % message)
@@ -122,19 +82,35 @@ class Slave:
                 self.masterAddress = message[19:]
                 return(b"yesMaster")
             else:
-                return(b"youWillNeverBeMyMaster")
+                return (b"youWillNeverBeMyMaster")
 
         elif (message == "otherMessage"):
             return (b"another response from slave node")
 
         elif (message[:10] == "subvector:"):
-
             return self.parseSubVectorCommand(message[10:])
 
         else:
-            return(b"ERROR: Could not parse your command to slave node... please try again. \nCommand:" + message)
+            return (b"ERROR: Could not parse your command to slave node... please try again. \nCommand:" + message)
 
     def __init__(self):
+
+        # Map used in parseSubVectorCommand
+        self.command_dict = dict(
+            create=self.createSubVector,
+            iadd=self.iadd,
+            iaddVec=self.iaddVec,
+            imul=self.imul,
+            imulVec=self.imulVec,
+            dot=self.dot,
+            div=self.div,
+            divVec=self.divVec,
+            pow=self.pow,
+            randn=self.randn,
+            uniform=self.uniform,
+            getdata=self.getData,
+            sum=self.sum
+        )
 
         self.subvectors = list()
 
@@ -148,7 +124,6 @@ class Slave:
             self.listen(port + 1)
 
         while True:
-            # Wait for next request from client
             message = socket.recv()
 
             socket.send(self.parse(message))
