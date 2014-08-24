@@ -134,18 +134,18 @@ class Slave:
         else:
             return(b"ERROR: Could not parse your command to slave node... please try again. \nCommand:" + message)
 
-    def __init__(self, port=5557):
+    def __init__(self):
 
         self.subvectors = list()
 
+    def listen(self, port=5557):
         try:
             print("Starting Slave on port:" + str(port))
             context = zmq.Context()
             socket = context.socket(zmq.REP)
-            socket.bind("tcp://*:"+str(port))
+            socket.bind("tcp://*:" + str(port))
         except:
-            self = Slave(port+1)
-
+            self.listen(port + 1)
 
         while True:
             # Wait for next request from client
@@ -153,5 +153,5 @@ class Slave:
 
             socket.send(self.parse(message))
 
-            #  Send reply back to client
+            # Send reply back to client
             # socket.send(b"I am a slave node.")
