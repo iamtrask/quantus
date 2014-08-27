@@ -32,12 +32,12 @@ class SubVectorSlave():
 
     def randn(self,value):
         self.data = np.random.randn(self.length)
-        self.mul(value)
+        self.imul(value)
         return 0
 
     def uniform(self,value):
         self.data = np.random.rand(self.length)
-        self.mul(value)
+        self.imul(value)
         return 0
 
     def sum(self):

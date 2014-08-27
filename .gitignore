@@ -1,6 +1,7 @@
 *.iml
 .idea/
 .ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
 *.iws
 .installed*
 eggs
